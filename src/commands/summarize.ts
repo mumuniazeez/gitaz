@@ -5,7 +5,7 @@ export interface SummarizeOption {
   days: number;
 }
 
-export const summarize = async (option: SummarizeOption) => {
+export const summary = async (option: SummarizeOption) => {
   const isGitAvailable = checkIfGitInitialized();
   if (!isGitAvailable)
     return console.log(chalk.red("Error: git not initialized. run git init"));
@@ -13,4 +13,6 @@ export const summarize = async (option: SummarizeOption) => {
   const log = getGitLog(option.days);
 
   if (!log) return console.log(chalk.yellow("No commit found"));
+
+  console.log(chalk.white(log));
 };
