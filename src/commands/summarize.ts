@@ -2,6 +2,11 @@ import chalk from "chalk";
 import ora from "ora";
 import { checkIfGitInitialized, getGitLog } from "../utils/git.js";
 import client from "../utils/ai.js";
+import { marked } from "marked";
+import { markedTerminal } from "marked-terminal";
+
+// Configure marked to use marked-terminal
+marked.use(markedTerminal() as any);
 
 export interface SummarizeOption {
   days: number;
@@ -35,6 +40,7 @@ export const summary = async (option: SummarizeOption) => {
   try {
     const res = await client.chat.send({
       chatRequest: {
+        model: "qwen/qwen3-32b",
         messages: [
           {
             role: "system",
@@ -44,9 +50,14 @@ export const summary = async (option: SummarizeOption) => {
           },
           {
             role: "user",
-            content: log,
+            content: `
+              Here is the git log of the my commits:
+              ${log}
+              Now provide a summary of what I did in the last ${option.days} days.
+            `,
           },
         ],
+        stream: false,
       },
     });
 
@@ -59,7 +70,7 @@ export const summary = async (option: SummarizeOption) => {
     }
 
     spinner.succeed("Summary Generated");
-    console.log(response.message);
+    console.log(chalk.white(marked.parse(response.message.content)));
   } catch (error) {
     spinner.fail("Summary generation failed");
     console.log(error);

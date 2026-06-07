@@ -2,6 +2,7 @@ import "dotenv/config";
 import { Command } from "commander";
 import { summary } from "./commands/summarize.js";
 import { commit } from "./commands/commit.js";
+import { setup } from "./commands/setup.js";
 
 const program = new Command();
 
@@ -11,6 +12,11 @@ program
     "Gitaz is a command-line tool that uses AI to help you with your Git workflow.",
   )
   .version("1.0.0");
+
+program
+  .command("setup")
+  .description("Setup Gitaz, provide your AI provider")
+  .action(setup);
 
 program
   .command("summary")
