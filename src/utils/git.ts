@@ -20,6 +20,8 @@ export const getGitLog = (days: number = 7) => {
   ).toString();
 };
 
-export function getStagedDiff() {
-  return execSync("git diff --staged").toString().trim();
+export function getDiff(staged: boolean) {
+  return execSync(`git diff ${staged ? "--staged" : ""}`)
+    .toString()
+    .trim();
 }
