@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
 import { aiProvider } from "../utils/ai.js";
+import fs from "fs";
 
 export const setup = async () => {
   console.log(chalk.green("Let's setup Gitaz"));
@@ -24,4 +25,36 @@ export const setup = async () => {
   ]);
 
   console.log(aiProviderRes.aiProviderValue, model.modelValue, model.apiKey);
+
+  fs.writeFile(
+    `${process.cwd()}/.config.json`,
+    `
+  {
+  "model": "${model.modelValue}",
+  "serverUrl": "${
+    aiProvider.find((ap) => ap.name === aiProviderRes.aiProviderValue)
+      ?.serverUrl
+  }",
+  "apiKey": "${model.apiKey}"
+  }
+  `.trim(),
+    (error) => {
+      if (error) {
+        console.log(chalk.red("Setup Failed"));
+        console.log(error);
+        return;
+      }
+      fs.copyFile(
+        `${process.cwd()}/.config.json`,
+        `${process.cwd()}/dist/.config.json`,
+        () => {},
+      );
+      fs.copyFile(
+        `${process.cwd()}/.config.json`,
+        `${process.cwd()}/src/.config.json`,
+        () => {},
+      );
+      console.log(chalk.green("Setup complete, you are ready to go."));
+    },
+  );
 };

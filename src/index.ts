@@ -15,7 +15,7 @@ program
 
 program
   .command("setup")
-  .description("Setup Gitaz, provide your AI provider")
+  .description("Setup  your AI provider for Gitaz")
   .action(setup);
 
 program
