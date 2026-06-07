@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { Command } from "commander";
 import { summary } from "./commands/summarize.js";
+import { commit } from "./commands/commit.js";
 
 const program = new Command();
 
@@ -16,5 +17,15 @@ program
   .description("Summarize recent git activity")
   .option("-d, --days <number>", "Number of days", "7")
   .action(summary);
+
+program
+  .command("commit")
+  .description("Generate commit message for your changes")
+  .option(
+    "-s, --staged-changes",
+    "Generate commit message for only staged changes",
+  )
+  .option("-p, --auto-apply", "Automatically push the staged changes")
+  .action(commit);
 
 program.parse();
