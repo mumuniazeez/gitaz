@@ -25,6 +25,8 @@ export const summary = async (option: SummarizeOption) => {
   // sanitize days to make sure it's a number
   option.days = Number(option.days);
 
+  const config = getConfig();
+
   const isGitAvailable = checkIfGitInitialized();
   if (!isGitAvailable)
     return console.log(chalk.red("Error: git not initialized. run git init"));
@@ -37,8 +39,6 @@ export const summary = async (option: SummarizeOption) => {
     );
 
   const spinner = ora("Generating Summary").start();
-
-  const config = getConfig();
 
   try {
     const res = await client.chat.send({

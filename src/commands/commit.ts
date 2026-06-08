@@ -17,6 +17,8 @@ export interface CommitOption {
 }
 
 export const commit = async (option: CommitOption) => {
+  const config = getConfig();
+
   const isGitAvailable = checkIfGitInitialized();
   if (!isGitAvailable)
     return console.log(chalk.red("Error: git not initialized. run git init"));
@@ -27,8 +29,6 @@ export const commit = async (option: CommitOption) => {
     return console.log(chalk.yellow("No changes detected in your workspace."));
 
   const generationSpinner = ora("Generating Commit Message").start();
-
-  const config = getConfig();
 
   try {
     const res = await client.chat.send({

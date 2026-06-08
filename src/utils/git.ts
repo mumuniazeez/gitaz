@@ -49,7 +49,7 @@ export const commitChanges = (commitMessage: string) => {
     execSync(`git commit -m "${commitMessage.replace(/"/g, '\\"')}"`);
     console.log(chalk.green("✔"), "changes committed");
     console.log(chalk.white("pushing changes...\n"));
-    execSync("git push");
+    execSync("git push", { stdio: "inherit" });
     console.log(chalk.green("✔"), "changes pushed");
     return { success: true };
   } catch (error) {
