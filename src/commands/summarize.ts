@@ -4,6 +4,7 @@ import { checkIfGitInitialized, getGitLog } from "../utils/git.js";
 import client from "../utils/ai.js";
 import { marked } from "marked";
 import { markedTerminal } from "marked-terminal";
+import { getConfig } from "../utils/config.js";
 
 // Configure marked to use marked-terminal
 marked.use(markedTerminal() as any);
@@ -37,10 +38,12 @@ export const summary = async (option: SummarizeOption) => {
 
   const spinner = ora("Generating Summary").start();
 
+  const config = getConfig();
+
   try {
     const res = await client.chat.send({
       chatRequest: {
-        model: "qwen/qwen3-32b",
+        model: config.model,
         messages: [
           {
             role: "system",

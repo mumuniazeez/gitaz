@@ -27,11 +27,27 @@ export const getDiff = (staged: boolean) => {
     .trim();
 };
 
-export const commitChanges = (commitMessage: string) => {
-  execSync(`git commit -m "${commitMessage}`);
-  console.log(chalk.green("✔"), "changes committed");
-  console.log(chalk.white("pushing changes..."));
+export const hasStagedChanges = (): boolean => {
   try {
+    const output = execSync("git diff --cached --name-only", {
+      cwd: process.cwd(),
+      encoding: "utf-8",
+    }).trim();
+
+    return output.length > 0;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const commitChanges = (commitMessage: string) => {
+  try {
+    if (!hasStagedChanges()) {
+      execSync("git add --all");
+    }
+    execSync(`git commit -m "${commitMessage.replace(/"/g, '\\"')}"`);
+    console.log(chalk.green("✔"), "changes committed");
+    console.log(chalk.white("pushing changes..."));
     execSync("git push");
     console.log(chalk.green("✔"), "changes pushed");
     return { success: true };

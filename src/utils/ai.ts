@@ -1,4 +1,5 @@
 import { OpenRouter } from "@openrouter/sdk";
+import { getConfig } from "./config.js";
 
 interface AIProvider {
   serverUrl: string;
@@ -11,15 +12,20 @@ export const aiProvider: AIProvider[] = [
   { name: "Google Gen AI", serverUrl: "", models: ["gemini-flash-3"] },
   {
     name: "Hack Club AI (Free AI for teenagers [13-18])",
-    serverUrl: "",
-    models: ["gemini-flash-3"],
+    serverUrl: "https://ai.hackclub.com/proxy/v1",
+    models: ["qwen/qwen3-32b"],
   },
 ];
 
 export default (function client() {
+  const config = getConfig();
+  if (!config) {
+    throw new Error("No config found. Run 'gitaz setup' to create one");
+  }
+
   const client = new OpenRouter({
-    apiKey: process.env.HACKCUB_AI_API_KEY,
-    serverURL: process.env.HACKCUB_AI_API_URL,
+    apiKey: config.apiKey,
+    serverURL: config.serverUrl,
   });
 
   return client;

@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
 import { aiProvider } from "../utils/ai.js";
-import fs from "fs";
+import { saveConfig } from "../utils/config.js";
 
 export const setup = async () => {
   console.log(chalk.green("Let's setup Gitaz"));
@@ -9,52 +9,36 @@ export const setup = async () => {
     type: "select",
     choices: aiProvider.map((ap) => ap.name),
     message: "Select your AI provider",
-    name: "aiProviderValue",
+    name: "provider",
   });
 
   const model = await inquirer.prompt([
     {
       type: "select",
       choices: aiProvider
-        .find((ap) => ap.name === aiProviderRes.aiProviderValue)
+        .find((ap) => ap.name === aiProviderRes.provider)
         ?.models.map((model) => model),
       message: "Select the model you want to use",
-      name: "modelValue",
+      name: "model",
     },
-    { type: "input", name: "apiKey", message: "Provide your API key" },
+    {
+      type: "input",
+      name: "apiKey",
+      message: "Provide your API key",
+      validate: (value) => {
+        if (!value || value.trim().length === 0) {
+          return "API key is required";
+        }
+        return true;
+      },
+    },
   ]);
 
-  console.log(aiProviderRes.aiProviderValue, model.modelValue, model.apiKey);
+  saveConfig({
+    ...model,
+    serverUrl: aiProvider.find((ap) => ap.name === aiProviderRes.provider)
+      ?.serverUrl!,
+  });
 
-  fs.writeFile(
-    `${process.cwd()}/.config.json`,
-    `
-  {
-  "model": "${model.modelValue}",
-  "serverUrl": "${
-    aiProvider.find((ap) => ap.name === aiProviderRes.aiProviderValue)
-      ?.serverUrl
-  }",
-  "apiKey": "${model.apiKey}"
-  }
-  `.trim(),
-    (error) => {
-      if (error) {
-        console.log(chalk.red("Setup Failed"));
-        console.log(error);
-        return;
-      }
-      fs.copyFile(
-        `${process.cwd()}/.config.json`,
-        `${process.cwd()}/dist/.config.json`,
-        () => {},
-      );
-      fs.copyFile(
-        `${process.cwd()}/.config.json`,
-        `${process.cwd()}/src/.config.json`,
-        () => {},
-      );
-      console.log(chalk.green("Setup complete, you are ready to go."));
-    },
-  );
+  console.log(chalk.green("Setup completed successfully."));
 };

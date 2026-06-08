@@ -5,6 +5,8 @@ import client from "../utils/ai.js";
 import { marked } from "marked";
 import { markedTerminal } from "marked-terminal";
 import inquirer from "inquirer";
+import { getConfig } from "../utils/config.js";
+import clipboard from "clipboardy";
 
 // Configure marked to use marked-terminal
 marked.use(markedTerminal() as any);
@@ -24,14 +26,14 @@ export const commit = async (option: CommitOption) => {
   if (!diff)
     return console.log(chalk.yellow("No changes detected in your workspace."));
 
-  console.log(diff);
-
   const generationSpinner = ora("Generating Commit Message").start();
+
+  const config = getConfig();
 
   try {
     const res = await client.chat.send({
       chatRequest: {
-        model: "qwen/qwen3-32b",
+        model: config.model,
         messages: [
           {
             role: "system",
@@ -65,6 +67,30 @@ export const commit = async (option: CommitOption) => {
     generationSpinner.succeed("Commit message Generated");
     console.log(marked.parse(response.message.content));
 
+    if (!option.autoApply) {
+      const userRes = await inquirer.prompt({
+        type: "select",
+        choices: ["Copy to Clipboard", "Commit changes", "Do both"],
+        name: "nextAction",
+        message: "Do you want to?",
+      });
+
+      switch (userRes.nextAction) {
+        case "Copy to Clipboard":
+          await clipboard.write(response.message.content);
+          console.log(chalk.green("Commit message copied to clipboard"));
+          break;
+        case "Commit changes":
+          option.autoApply = true;
+          break;
+        case "Do both":
+          await clipboard.write(response.message.content);
+          console.log(chalk.green("Commit message copied to clipboard"));
+          option.autoApply = true;
+          break;
+      }
+    }
+
     if (option.autoApply) {
       const applyChangesSpinner = ora("Applying changes").start();
       const applyResult = commitChanges(response.message.content);
@@ -76,14 +102,6 @@ export const commit = async (option: CommitOption) => {
         return console.log("done");
       }
     } else {
-      const userRes = await inquirer.prompt({
-        type: "select",
-        choices: ["Copy to Clipboard", "Commit changes", "Do both"],
-        name: "nextAction",
-        message: "Do you want to?",
-      });
-
-      userRes.nextAction;
     }
   } catch (error) {
     generationSpinner.fail("Commit message generation failed");
