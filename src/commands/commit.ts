@@ -93,6 +93,7 @@ export const commit = async (option: CommitOption) => {
 
     if (option.autoApply) {
       const applyChangesSpinner = ora("Applying changes").start();
+      console.log("\n");
       const applyResult = commitChanges(response.message.content);
 
       if (applyResult.success) {

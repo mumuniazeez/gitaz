@@ -43,11 +43,12 @@ export const hasStagedChanges = (): boolean => {
 export const commitChanges = (commitMessage: string) => {
   try {
     if (!hasStagedChanges()) {
+      console.log(chalk.white("adding changes..."));
       execSync("git add --all");
     }
     execSync(`git commit -m "${commitMessage.replace(/"/g, '\\"')}"`);
     console.log(chalk.green("✔"), "changes committed");
-    console.log(chalk.white("pushing changes..."));
+    console.log(chalk.white("pushing changes...\n"));
     execSync("git push");
     console.log(chalk.green("✔"), "changes pushed");
     return { success: true };
