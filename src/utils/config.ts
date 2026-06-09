@@ -3,10 +3,11 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 
-interface ConfigData {
+export interface ConfigData {
   model: string;
   serverUrl: string;
   apiKey: string;
+  commitStyle?: "concise" | "conventional" | "detailed";
 }
 
 const CONFIG_PATH = path.join(os.homedir(), ".gitaz.json");
@@ -22,17 +23,17 @@ export const saveConfig = (configData: ConfigData) => {
   }
 };
 
-export const getConfig = (): ConfigData => {
+export const getConfig = (): ConfigData | null => {
   try {
     if (fs.existsSync(CONFIG_PATH)) {
       const data = fs.readFileSync(CONFIG_PATH, "utf-8");
       return JSON.parse(data) as ConfigData;
     }
-    throw console.log(
-      chalk.red("No config found. Run 'gitaz setup' to create one"),
-    );
+    return null;
   } catch (error) {
-    console.log(chalk.red("Failed to read config"));
-    throw console.log(error);
+    console.log(chalk.red("Failed to read config file at " + CONFIG_PATH));
+    console.log(error);
+    return null;
   }
 };
+

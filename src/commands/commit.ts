@@ -19,6 +19,11 @@ export interface CommitOption {
 export const commit = async (option: CommitOption) => {
   const config = getConfig();
 
+  if (!config)
+    return console.log(
+      chalk.red("Error: AI Provider not set. run gitaz setup"),
+    );
+
   const isGitAvailable = checkIfGitInitialized();
   if (!isGitAvailable)
     return console.log(chalk.red("Error: git not initialized. run git init"));
@@ -70,10 +75,17 @@ export const commit = async (option: CommitOption) => {
     if (!option.autoApply) {
       const userRes = await inquirer.prompt({
         type: "select",
-        choices: ["Copy to Clipboard", "Commit changes", "Do both"],
+        choices: [
+          "Copy to Clipboard",
+          "Commit changes",
+          "Edit before commit",
+          "Do both (Copy & Commit)",
+        ],
         name: "nextAction",
         message: "Do you want to?",
       });
+
+      let commitMessage = response.message.content;
 
       switch (userRes.nextAction) {
         case "Copy to Clipboard":
@@ -83,7 +95,23 @@ export const commit = async (option: CommitOption) => {
         case "Commit changes":
           option.autoApply = true;
           break;
-        case "Do both":
+        case "Edit before commit":
+          const res = await inquirer.prompt({
+            type: "editor",
+            name: "newCommitMessage",
+            message: commitMessage,
+            default: commitMessage,
+            validate: (value) => {
+              if (!value || value.trim().length === 0) {
+                return "A commit message is required";
+              }
+              return true;
+            },
+          });
+          commitMessage = res.newCommitMessage;
+          option.autoApply = true;
+          break;
+        case "Do both (Copy & Commit)":
           await clipboard.write(response.message.content);
           console.log(chalk.green("Commit message copied to clipboard"));
           option.autoApply = true;

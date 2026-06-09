@@ -95,7 +95,7 @@ Config Format:
 
 ## Wanna work on Gitaz
 
-You can contribute to Gitaz by following the same steps as any other open source project.
+You can contribute to Gitaz by following the same steps as any other open source project. Raise an issue or create a PR.
 
 1. **Clone the repo**
 
@@ -112,7 +112,7 @@ You can contribute to Gitaz by following the same steps as any other open source
 
 3. **Write your code**
 
-   Make the improvement you wanna
+   Make the improvement you wanna make
 
 4. **Test your code**
    Since the code is written in TypeScript, you'll need to build/compile the code into JavaScript before you can test it.
@@ -123,3 +123,6 @@ You can contribute to Gitaz by following the same steps as any other open source
    # To only build
    npm run build
    ```
+
+5. **Create a pull request**
+   Feel free to create a PR, your contribution is really valuable
