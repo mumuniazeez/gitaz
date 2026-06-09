@@ -27,6 +27,11 @@ export const summary = async (option: SummarizeOption) => {
 
   const config = getConfig();
 
+  if (!config)
+    return console.log(
+      chalk.red("Error: AI Provider not set. run gitaz setup"),
+    );
+
   const isGitAvailable = checkIfGitInitialized();
   if (!isGitAvailable)
     return console.log(chalk.red("Error: git not initialized. run git init"));

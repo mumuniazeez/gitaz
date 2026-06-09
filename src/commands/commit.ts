@@ -97,9 +97,10 @@ export const commit = async (option: CommitOption) => {
           break;
         case "Edit before commit":
           const res = await inquirer.prompt({
-            type: "editor",
+            type: "input",
             name: "newCommitMessage",
-            message: commitMessage,
+            message:
+              "Edit commit message and click enter to commit. To go to a new paragraph use shift+enter",
             default: commitMessage,
             validate: (value) => {
               if (!value || value.trim().length === 0) {
