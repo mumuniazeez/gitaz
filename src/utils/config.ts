@@ -31,9 +31,14 @@ export const getConfig = (): ConfigData | null => {
     }
     return null;
   } catch (error) {
-    console.log(chalk.red("Failed to read config file at " + CONFIG_PATH));
+    console.log(
+      chalk.red(
+        "Failed to read config file at " +
+          CONFIG_PATH +
+          ". Please run 'gitaz setup' to set up the config.",
+      ),
+    );
     console.log(error);
     return null;
   }
 };
-

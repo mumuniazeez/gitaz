@@ -1,5 +1,5 @@
 import { OpenRouter } from "@openrouter/sdk";
-import { getConfig } from "./config.js";
+import { getConfig, type ConfigData } from "./config.js";
 
 export interface AIProvider {
   serverUrl: string;
@@ -40,16 +40,11 @@ export const aiProvider: AIProvider[] = [
   },
 ];
 
-export default (function client() {
-  const config = getConfig();
-  if (!config) {
-    throw new Error("No config found. Run 'gitaz setup' to create one");
-  }
-
+export default function getAiClient(config: ConfigData) {
   const client = new OpenRouter({
     apiKey: config.apiKey,
     serverURL: config.serverUrl,
   });
 
   return client;
-})();
+}

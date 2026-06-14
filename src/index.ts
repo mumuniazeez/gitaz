@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { Command } from "commander";
 import { summary } from "./commands/summarize.js";
 import { commit } from "./commands/commit.js";
@@ -22,6 +21,7 @@ program
   .command("summary")
   .description("Summarize recent git activity")
   .option("-d, --days <number>", "Number of days", "7")
+  .option("-f, --format <Brief|Conventional|Detailed>", "Summary format")
   .action(summary);
 
 program
