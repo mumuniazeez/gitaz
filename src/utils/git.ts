@@ -48,12 +48,12 @@ export const commitChanges = (commitMessage: string) => {
     }
     execSync(`git commit -m "${commitMessage.replace(/"/g, '\\"')}"`);
     console.log(chalk.green("✔"), "changes committed");
-    console.log(chalk.white("pushing changes...\n"));
-    execSync("git push", { stdio: "inherit" });
-    console.log(chalk.green("✔"), "changes pushed");
+    // TODO: Implement 'gitaz push' command
+    console.log(chalk.white("Run 'gitaz push' to push your code online.\n"));
+
     return { success: true };
   } catch (error) {
-    console.log(chalk.red("✖"), "changes not pushed");
+    console.log(chalk.red("✖"), "changes commit failed");
     console.log(error);
     return { success: false, error };
   }

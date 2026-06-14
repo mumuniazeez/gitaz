@@ -113,6 +113,7 @@ export const commit = async (option: CommitOption) => {
         choices: [
           "Copy to Clipboard",
           "Commit changes",
+          "Commit changes",
           "Edit before commit",
           "Do both (Copy & Commit)",
         ],
@@ -129,6 +130,7 @@ export const commit = async (option: CommitOption) => {
           option.autoApply = true;
           break;
         case "Edit before commit":
+          console.log("Press Enter whe you're done");
           const res = await inquirer.prompt({
             type: "input",
             name: "newCommitMessage",
@@ -158,12 +160,11 @@ export const commit = async (option: CommitOption) => {
       const applyResult = commitChanges(commitMessage);
 
       if (applyResult.success) {
-        applyChangesSpinner.succeed("changes applied");
+        applyChangesSpinner.succeed("changes committed");
       } else {
-        applyChangesSpinner.fail("changes not applied");
+        applyChangesSpinner.fail("changes not committed");
         return console.log("done");
       }
-    } else {
     }
   } catch (error) {
     generationSpinner.fail("Commit message generation failed");
