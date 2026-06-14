@@ -27,6 +27,10 @@ export const getDiff = (staged: boolean) => {
     .trim();
 };
 
+export const getDiffByHash = (commitHash: string) => {
+  return execSync(`git show ${commitHash} `).toString().trim();
+};
+
 export const hasStagedChanges = (): boolean => {
   try {
     const output = execSync("git diff --cached --name-only", {

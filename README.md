@@ -79,6 +79,22 @@ gitaz summary -d 30
 gitaz summary --days 30
 ```
 
+### 4. `gitaz explain`
+
+Summarize your recent git commits into structured notes or summaries.
+
+```bash
+gitaz summary
+```
+
+You can use the `-d, --days <number>` option to define the timeframe in days to analyze. (default is 7 days)
+
+```bash
+gitaz summary -d 30
+# or
+gitaz summary --days 30
+```
+
 ## Configuration
 
 Gitaz stores configuration globally in your user home directory. (`~/gitaz.json`).

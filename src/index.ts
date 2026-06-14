@@ -2,6 +2,7 @@ import { Command } from "commander";
 import { summary } from "./commands/summarize.js";
 import { commit } from "./commands/commit.js";
 import { setup } from "./commands/setup.js";
+import { explain } from "./commands/explain.js";
 
 const program = new Command();
 
@@ -23,6 +24,12 @@ program
   .option("-d, --days <number>", "Number of days", "7")
   .option("-f, --format <Brief|Conventional|Detailed>", "Summary format")
   .action(summary);
+
+program
+  .command("explain")
+  .description("Get a detailed explanation about a commit")
+  .argument("<commit-hash>", "The commit hash")
+  .action(explain);
 
 program
   .command("commit")
