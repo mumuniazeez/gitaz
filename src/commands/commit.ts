@@ -113,7 +113,6 @@ export const commit = async (option: CommitOption) => {
         choices: [
           "Copy to Clipboard",
           "Commit changes",
-          "Commit changes",
           "Edit before commit",
           "Do both (Copy & Commit)",
         ],
@@ -163,7 +162,6 @@ export const commit = async (option: CommitOption) => {
         applyChangesSpinner.succeed("changes committed");
       } else {
         applyChangesSpinner.fail("changes not committed");
-        return console.log("done");
       }
     }
   } catch (error) {
