@@ -142,3 +142,9 @@ You can contribute to Gitaz by following the same steps as any other open source
 
 5. **Create a pull request**
    Feel free to create a PR, your contribution is really valuable
+
+## Licence
+MIT
+
+## AI Usage Disclaimer
+AI was used in this project to help with AI Providers setup.. all other feature were written by me..
