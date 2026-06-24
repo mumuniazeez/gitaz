@@ -6,6 +6,10 @@
   "bin": {
     "gitaz": "./dist/index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mumuniazeez/gitaz.git"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc -w"
