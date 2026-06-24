@@ -1,6 +1,6 @@
 {
-  "name": "gitaz",
-  "version": "1.0.0",
+  "name": "@azcodes/gitaz",
+  "version": "1.2.5",
   "description": "",
   "main": "./dist/index.js",
   "bin": {
