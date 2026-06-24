@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { Command } from "commander";
 import { summary } from "./commands/summarize.js";
 import { commit } from "./commands/commit.js";
