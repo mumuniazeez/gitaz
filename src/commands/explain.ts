@@ -26,7 +26,7 @@ export const explain = async (commitHash: string) => {
   const diff = getDiffByHash(commitHash);
 
   if (!diff)
-    return console.log(chalk.yellow("No changes detected in your workspace."));
+    return console.log(chalk.yellow("Invalid Commit Hash, no changes was detected."));
 
   const client = getAiClient(config);
 
@@ -53,11 +53,11 @@ export const explain = async (commitHash: string) => {
   const response = res.choices[0];
 
   if (!response) {
-    generationSpinner.fail("Commit message generation failed");
+    generationSpinner.fail("Explanation generation failed");
     console.log("AI Provider didn't return any response");
     return;
   }
 
-  generationSpinner.succeed("Commit message Generated");
+  generationSpinner.succeed("Explanation Generated");
   console.log(marked.parse(response.message.content));
 };

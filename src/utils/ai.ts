@@ -82,7 +82,8 @@ export const aiProvider: AIProvider[] = [
     serverUrl: "https://ai.hackclub.com/proxy/v1",
     models: [
       "qwen/qwen3-32b",
-      "antropic/claude-opus-4.8",
+      "anthropic/claude-opus-4.8",
+      "deepseek-v3.2",
       "google/gemini-3.5-flash",
     ],
   },
